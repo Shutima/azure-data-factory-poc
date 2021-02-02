@@ -1,0 +1,18 @@
+{
+	"name": "FileServerSourceCSV1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "FileServerSourceCSV1",
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "C:\\storage\\archive\\dataset\\media-shutima\\CSV_DimenH",
+			"userId": "AIVIadmin",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJiOTAxNWEzYi05OTljLTQwNmMtODM2ZS00ZTJiMjdhMjk4ZTUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "IRPOC1",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

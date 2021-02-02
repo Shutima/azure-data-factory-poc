@@ -1,0 +1,18 @@
+{
+	"name": "PLZ_vm_POC",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"description": "Source File System on Virtual Machine, Edge Machine",
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "C:\\storage\\archive\\fr_bre_k0echeck\\03",
+			"userId": "AIVIadmin",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJkNTg1ZTVmYi1jMzVlLTQxYzktOTM0ZC1iZTExNmM0Mzg3OWUiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "IRPOC1",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

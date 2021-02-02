@@ -1,0 +1,10 @@
+{
+	"name": "testuploadFASPoc2",
+	"description": "Testing uploading files from Azure VM to Blob storage using Azure Data Factory",
+	"image": "<svg width=\"400px\" height=\"240px\" viewBox=\"0 0 400 240\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" style=\"width: 400px; height: 240px;\"><g transform=\"matrix(1, 0, 0, 1, 0, 0)\" clip-path=\"url(#mainClip20742)\"><g transform=\"matrix(8, 0, 0, 8, 200, 120)\"/></g><clipPath id=\"mainClip20742\"><rect x=\"0\" y=\"0\" width=\"400px\" height=\"240px\"/></clipPath></svg>",
+	"icons": [],
+	"author": "shutima.potivorakun@faurecia.com",
+	"annotations": [],
+	"services": [],
+	"categories": []
+}

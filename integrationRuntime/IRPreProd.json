@@ -1,0 +1,7 @@
+{
+	"name": "IRPreProd",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Intergration runtime in 9tech office of preprod"
+	}
+}

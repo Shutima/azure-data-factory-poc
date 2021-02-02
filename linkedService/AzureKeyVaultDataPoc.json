@@ -1,0 +1,11 @@
+{
+	"name": "AzureKeyVaultDataPoc",
+	"properties": {
+		"description": "Azure key vault",
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://keyvault-aivi-data-poc.vault.azure.net/"
+		}
+	}
+}

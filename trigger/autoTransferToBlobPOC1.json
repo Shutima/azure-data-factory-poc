@@ -1,0 +1,19 @@
+{
+	"name": "autoTransferToBlobPOC1",
+	"properties": {
+		"description": "Test for the auto transfer files from Azure VM to Blob storage",
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 10,
+				"startTime": "2020-09-24T10:00:00Z",
+				"endTime": "2020-09-29T08:25:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}

@@ -1,0 +1,396 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name"
+		},
+		"AzureSqlDatabase1": {
+			"type": "string"
+		},
+		"TestLinkedServicePOC2": {
+			"type": "string"
+		},
+		"dfQualifPoc1": {
+			"type": "string"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/test_extract_filename_4_complete')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Pipeline test for blob names extraction and insert into SQL table using ADF expression and stored procedure",
+				"activities": [
+					{
+						"name": "TransferFilesFromVMtoBlob",
+						"description": "Transfer image data from VM edge machine to Blob storage",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "FileServerReadSettings",
+									"recursive": true
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "TestBinary2",
+								"type": "DatasetReference"
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "BinaryToBlob",
+								"type": "DatasetReference"
+							}
+						]
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "FilterForJPGfiles",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('FilterForJPGfiles').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Stored procedure image files",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[InsertDataJSON2]",
+										"storedProcedureParameters": {
+											"JsonDataBlobFileName": {
+												"value": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataCountryCode": {
+												"value": {
+													"value": "@substring(item().name, 0, 2)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataPlantName": {
+												"value": {
+													"value": "@substring(item().name, 2, 3)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataProductionLine": {
+												"value": {
+													"value": "@substring(item().name, 0, 12)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataBarcode": {
+												"value": {
+													"value": "@substring(item().name, 13, 8)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataDate": {
+												"value": {
+													"value": "@substring(item().name, 22, 8)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataNumberOfSeat": {
+												"value": {
+													"value": "@substring(item().name, 31, 6)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataCameraPosition": {
+												"value": {
+													"value": "@substring(item().name, 38, 12)",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "[parameters('AzureSqlDatabase1')]",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "ForEach2",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "FilterForJSONfiles",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('FilterForJSONfiles').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Stored procedure JSON files",
+									"type": "SqlServerStoredProcedure",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"storedProcedureName": "[[dbo].[InsertDataJSONFormat]",
+										"storedProcedureParameters": {
+											"JsonDataBlobFileName": {
+												"value": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataCountryCode": {
+												"value": {
+													"value": "@substring(item().name, 0, 2)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataPlantName": {
+												"value": {
+													"value": "@substring(item().name, 2, 3)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataProductionLine": {
+												"value": {
+													"value": "@substring(item().name, 0, 12)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataBarcode": {
+												"value": {
+													"value": "@substring(item().name, 13, 8)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataDate": {
+												"value": {
+													"value": "@substring(item().name, 22, 8)",
+													"type": "Expression"
+												},
+												"type": "String"
+											},
+											"JsonDataNumberOfSeat": {
+												"value": {
+													"value": "@substring(item().name, 31, 6)",
+													"type": "Expression"
+												},
+												"type": "String"
+											}
+										}
+									},
+									"linkedServiceName": {
+										"referenceName": "[parameters('AzureSqlDatabase1')]",
+										"type": "LinkedServiceReference"
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "FilterForJSONfiles",
+						"type": "Filter",
+						"dependsOn": [
+							{
+								"activity": "Get_Filenames_InBlob",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get_Filenames_InBlob').output.childitems",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@endswith(item().name,'json')",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Get_Filenames_InBlob",
+						"type": "GetMetadata",
+						"dependsOn": [
+							{
+								"activity": "TransferFilesFromVMtoBlob",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "BinaryToBlob",
+								"type": "DatasetReference"
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobStorageReadSettings"
+							},
+							"formatSettings": {
+								"type": "BinaryReadSettings"
+							}
+						}
+					},
+					{
+						"name": "FilterForJPGfiles",
+						"type": "Filter",
+						"dependsOn": [
+							{
+								"activity": "Get_Filenames_InBlob",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get_Filenames_InBlob').output.childitems",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@endswith(item().name,'jpeg')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/TestBinary2')]",
+				"[concat(variables('factoryId'), '/datasets/BinaryToBlob')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/TestBinary2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('TestLinkedServicePOC2')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "FileServerLocation"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BinaryToBlob')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "[parameters('dfQualifPoc1')]",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "output",
+						"container": "media-shutima"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

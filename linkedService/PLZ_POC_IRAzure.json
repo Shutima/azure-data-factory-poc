@@ -1,0 +1,22 @@
+{
+	"name": "PLZ_POC_IRAzure",
+	"properties": {
+		"description": "PLZ data in dfqualifstoracc",
+		"annotations": [],
+		"type": "AzureBlobStorage",
+		"typeProperties": {
+			"serviceEndpoint": "https://dfqualifstoracc.blob.core.windows.net",
+			"tenant": "5047bca2-da88-442e-a09a-d9b8af692adc",
+			"servicePrincipalId": "a6b745ad-76d6-4e27-bd8f-821c815108bc",
+			"servicePrincipalKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVaultDataPoc",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SPN-INF-AIVI-SECRET"
+			},
+			"accountKind": "StorageV2"
+		}
+	}
+}

@@ -1,0 +1,7 @@
+{
+	"name": "IRPOC1",
+	"properties": {
+		"type": "SelfHosted",
+		"description": "Intergration runtime for azure windows server"
+	}
+}

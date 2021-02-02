@@ -1,0 +1,16 @@
+{
+	"name": "PLZ_vm_SRC_BINARY_POC",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "PLZ_vm_POC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "FileServerLocation"
+			}
+		}
+	}
+}
